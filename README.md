@@ -1,148 +1,189 @@
 # ML Project Setup Guide
 A standard, reproducible setup process for Machine Learning and Data Science projects.
 
+---
+
 ## 1. Create Project Folder
 
-Creates a clean root folder for the project. Everything lives inside this folder.
-
 ```bash
+# Mac / Linux
 mkdir project_name
 cd project_name
 ```
+
+```powershell
+# Windows (PowerShell)
+mkdir project_name
+cd project_name
+```
+
+---
 
 ## 2. Create Virtual Environment
 
 Isolates project dependencies and prevents conflicts with system Python.
 
 ```bash
-python -m venv venv
+python -m venv .venv
 ```
+
+> Same command works on Windows, Mac, and Linux.
+
+---
 
 ## 3. Activate Virtual Environment
 
-Tells the system to install and use packages only for this project.
-
-**Windows**
-```bash
-venv\Scripts\activate
+**Windows (PowerShell)**
+```powershell
+.venv\Scripts\Activate.ps1
 ```
 
-**Linux / Mac**
-```bash
-source venv/bin/activate
+**Windows (Command Prompt)**
+```cmd
+.venv\Scripts\activate.bat
 ```
+
+**Mac / Linux**
+```bash
+source .venv/bin/activate
+```
+
+Once activated, you will see `(.venv)` at the start of your terminal line.
+
+---
 
 ## 4. Upgrade Core Python Tools
 
-Ensures latest and stable package handling.
+> Note: the package is `wheel` not `wheels` — a common typo that will cause an error.
 
 ```bash
 pip install --upgrade pip setuptools wheel
 ```
 
+> Same command works on Windows, Mac, and Linux.
+
+---
+
 ## 5. Create Project Folder Structure
 
-Keeps data, code, configs, and experiments organized. Matches production and industry standards.
-
+**Mac / Linux**
 ```bash
-mkdir data notebooks src configs logs tests
-mkdir data/raw data/processed
-mkdir src/features src/models src/training src/inference
+mkdir -p data/raw data/processed
+mkdir -p notebooks
+mkdir -p src/features src/models src/training src/inference
+mkdir -p configs logs tests
 ```
+
+**Windows (PowerShell)**
+
+PowerShell only accepts one folder per `mkdir` command. Run each line one by one.
+Also use backslash `\` not forward slash `/`.
+
+```powershell
+mkdir data
+mkdir notebooks
+mkdir src
+mkdir configs
+mkdir logs
+mkdir tests
+mkdir data\raw
+mkdir data\processed
+mkdir src\features
+mkdir src\models
+mkdir src\training
+mkdir src\inference
+```
+
+---
 
 ## 6. Project Structure Overview
 
 ```
 project_name/
 ├── data/
-│   ├── raw/                  # Original, untouched data. Never modify this.
-│   └── processed/            # Cleaned and transformed data ready for training.
+│   ├── raw/                        Original, untouched data. Never modify this.
+│   └── processed/                  Cleaned and transformed data ready for training.
 │
 ├── notebooks/
-│   └── eda.ipynb             # Exploratory analysis, visualizations, quick experiments.
-│                             # Not used for final training or production code.
+│   └── eda.ipynb                   Exploration, visualization, quick experiments only.
 │
 ├── src/
 │   ├── features/
-│   │   └── build_features.py # Feature engineering logic. Transforms raw data into
-│   │                         # model-ready inputs (encoding, scaling, new columns).
-│   │
+│   │   └── build_features.py       Feature engineering and transformation logic.
 │   ├── models/
-│   │   └── model.py          # Model definition. Defines architecture or loads a
-│   │                         # pre-trained model (e.g. sklearn, PyTorch, XGBoost).
-│   │
+│   │   └── model.py                Model definition or architecture.
 │   ├── training/
-│   │   └── train.py          # Training entry point. Loads data, calls feature
-│   │                         # engineering, trains model, saves it to disk.
-│   │
+│   │   └── train.py                Main training entry point. Run this to train.
 │   └── inference/
-│       └── predict.py        # Prediction logic. Loads saved model and runs it
-│                             # on new data. Used in APIs or batch jobs.
+│       └── predict.py              Loads saved model and runs predictions.
 │
 ├── configs/
-│   └── config.yaml           # All tunable settings in one place: paths, hyperparameters,
-│                             # model names, thresholds. No hardcoding in code.
+│   └── config.yaml                 All settings: paths, hyperparams, thresholds.
 │
-├── logs/                     # Training logs, error logs, experiment outputs.
-│
+├── logs/                           Training logs and error outputs.
 ├── tests/
-│   └── test_model.py         # Unit and integration tests for src/ code.
+│   └── test_model.py               Unit and integration tests for src/ code.
 │
-├── .env                      # Secret keys and environment variables. Never commit this.
-├── .gitignore                # Files and folders Git should ignore.
-├── requirements.txt          # All installed packages with exact versions.
-└── README.md                 # Project documentation.
+├── .env                            Secret keys. Never commit this.
+├── .gitignore                      Files Git should ignore.
+├── requirements.txt                All packages with exact versions.
+└── README.md                       Project documentation.
 ```
+
+---
 
 ## 7. What Code Goes Where
 
 **`src/features/build_features.py`**
-Anything that transforms raw data before it reaches the model. Examples: handling missing values, encoding categorical columns, normalizing numerical columns, creating new derived columns.
+Anything that transforms raw data before it reaches the model. Handle missing values, encode categoricals, normalize columns, create derived features.
 
 **`src/models/model.py`**
-The model definition itself. Examples: defining a neural network class, loading an XGBoost model, setting up a scikit-learn pipeline with a classifier.
+The model definition only. Define a neural network class, load an XGBoost model, or set up a scikit-learn pipeline. No training logic lives here.
 
 **`src/training/train.py`**
-The main script you run to train the model. It calls feature engineering, loads the data, trains the model defined in `model.py`, evaluates it, and saves the trained model to disk.
+The main script you run to train. It loads data, calls feature engineering, trains the model, evaluates it, and saves it to disk.
 
 **`src/inference/predict.py`**
-Loads the saved trained model and runs predictions on new, unseen data. This is what gets called inside a FastAPI endpoint or a batch prediction job.
+Loads the saved trained model and runs predictions on new data. This is what gets called inside a FastAPI endpoint or a batch job.
 
 **`configs/config.yaml`**
-All settings that might change between runs. Examples: file paths, learning rate, number of epochs, model type, train/test split ratio. Nothing gets hardcoded in Python files.
+All settings that might change between runs. Nothing gets hardcoded in Python files. File paths, learning rate, epochs, model type — all go here.
 
 **`notebooks/`**
-Only for exploration and understanding the data. Once logic is finalized here, it gets moved into the appropriate `src/` file. Notebooks never get imported or called by other code.
+Only for exploration. Once logic is finalized, move it into the appropriate `src/` file. Notebooks are never imported by other code.
+
+---
 
 ## 8. Create Required Files
 
-These files are needed for dependency tracking, configs, and execution.
-
-**Windows**
-```bash
-type nul > requirements.txt
-type nul > .gitignore
-type nul > README.md
-type nul > .env
-type nul > configs/config.yaml
-type nul > src/training/train.py
-```
-
-**Linux / Mac**
+**Mac / Linux**
 ```bash
 touch requirements.txt .gitignore README.md .env
 touch configs/config.yaml
 touch src/training/train.py
 ```
 
-## 9. Install Common ML / DS Dependencies
+**Windows (PowerShell)**
+```powershell
+New-Item requirements.txt, .gitignore, README.md, .env -ItemType File
+New-Item configs\config.yaml -ItemType File
+New-Item src\training\train.py -ItemType File
+```
 
-Installs libraries used for data analysis, ML, APIs, and experiments. Installed inside venv only.
+> Do not use `type nul >` in PowerShell. It does not work reliably. Use `New-Item` instead.
+
+---
+
+## 9. Install Common ML / DS Dependencies
 
 ```bash
 pip install numpy pandas scikit-learn matplotlib seaborn jupyter
 pip install mlflow fastapi uvicorn python-dotenv
 ```
+
+> Same command works on Windows, Mac, and Linux.
+
+---
 
 ## 10. Save Installed Dependencies
 
@@ -152,23 +193,35 @@ Freezes exact package versions so anyone can recreate the same environment.
 pip freeze > requirements.txt
 ```
 
-Note: `requirements.txt` always stays in the project root, never inside `venv`.
+> `requirements.txt` always stays in the project root, never inside `.venv`.
+
+---
 
 ## 11. Setup .gitignore
 
-Prevents unnecessary or sensitive files from being pushed to GitHub.
-
+**Mac / Linux**
 ```bash
-echo venv/ >> .gitignore
-echo __pycache__/ >> .gitignore
-echo .ipynb_checkpoints/ >> .gitignore
-echo .env >> .gitignore
-echo *.log >> .gitignore
+echo ".venv/" >> .gitignore
+echo "__pycache__/" >> .gitignore
+echo ".ipynb_checkpoints/" >> .gitignore
+echo ".env" >> .gitignore
+echo "*.log" >> .gitignore
 ```
 
-## 12. Write Training Entry Script
+**Windows (PowerShell)**
+```powershell
+Add-Content .gitignore ".venv/"
+Add-Content .gitignore "__pycache__/"
+Add-Content .gitignore ".ipynb_checkpoints/"
+Add-Content .gitignore ".env"
+Add-Content .gitignore "*.log"
+```
 
-Single entry point to train models. Notebooks are not used for final training.
+> Do not use `echo x >> file` in PowerShell. It can corrupt the file encoding. Use `Add-Content` instead.
+
+---
+
+## 12. Write Training Entry Script
 
 Edit `src/training/train.py`:
 
@@ -180,17 +233,22 @@ if __name__ == "__main__":
     train()
 ```
 
-## 13. Run Training Script
+---
 
-Confirms the project structure and environment are working correctly.
+## 13. Run Training Script
 
 ```bash
 python src/training/train.py
 ```
 
-## 14. Initialize Git Repository
+**Windows (PowerShell)**
+```powershell
+python src\training\train.py
+```
 
-Enables version control. Required for collaboration and deployment.
+---
+
+## 14. Initialize Git Repository
 
 ```bash
 git init
@@ -198,30 +256,50 @@ git add .
 git commit -m "Initial ML project setup"
 ```
 
-## 15. Recreate Environment (If venv Is Deleted)
+> Same command works on Windows, Mac, and Linux.
 
-The venv folder is disposable and can be rebuilt anytime from `requirements.txt`.
+---
 
+## 15. Recreate Environment (If .venv Is Deleted)
+
+The `.venv` folder is disposable and can be rebuilt anytime.
+
+**Mac / Linux**
 ```bash
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## 16. Deactivate Virtual Environment
+**Windows (PowerShell)**
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
-Exit the project environment safely.
+---
+
+## 16. Deactivate Virtual Environment
 
 ```bash
 deactivate
 ```
 
+> Same command works on Windows, Mac, and Linux.
+
+---
+
 ## Key Rules
 
-- Never write code inside `venv`
-- Never commit `venv` to GitHub
-- Always activate venv before working
+- Never write production code inside `.venv`
+- Never commit `.venv` to GitHub
+- Always activate the virtual environment before starting work
 - All production code lives in `src/`
 - Notebooks are for exploration only, not production
+- Never hardcode settings in Python files — use `configs/config.yaml`
+- Never commit `.env` to GitHub
 
-> Virtual environment isolates dependencies, `requirements.txt` guarantees reproducibility, and a clean folder structure keeps ML projects production-ready.
+---
+
+> Virtual environment isolates dependencies, `requirements.txt` guarantees reproducibility, and a clean folder structure keeps ML projects maintainable and production-ready from day one.
