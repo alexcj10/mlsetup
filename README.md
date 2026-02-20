@@ -1,8 +1,6 @@
 <div align="center">
 <img src="https://raw.githubusercontent.com/alexcj10/mlsetup/main/assets/logo.svg" width="400" alt="mlnew">
 
-<br>
-
 **Professional ML project scaffolding CLI — one command, zero config.**
 
 [![Latest Version](https://img.shields.io/pypi/v/mlnew?color=blue&label=latest)](https://pypi.org/project/mlnew/)

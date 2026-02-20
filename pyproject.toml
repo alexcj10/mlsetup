@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlnew"
-version = "1.2.5"
+version = "1.2.6"
 description = "One command ML project scaffolding CLI — works on Windows, Mac, and Linux."
 readme = "README.md"
 requires-python = ">=3.8"
