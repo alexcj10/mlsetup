@@ -1,5 +1,16 @@
 <div align="center">
-<img src="assets/logo.svg" width="400" alt="mlnew">
+<svg width="300" viewBox="0 0 420 120" xmlns="http://www.w3.org/2000/svg">
+  <text x="50%" y="55%"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-family="JetBrains Mono, monospace"
+        font-size="64"
+        font-weight="500"
+        letter-spacing="-1"
+        fill="#6366f1">
+    mlnew
+  </text>
+</svg>
 
 <br>
 
