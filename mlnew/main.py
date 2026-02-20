@@ -120,10 +120,11 @@ def build_install_list(packages: dict) -> list:
 
 def show_packages_list():
     print()
-    print(bold("  Default packages and versions:"))
+    print(bold("  Default packages:"))
     print()
     for pkg, ver in DEFAULT_PACKAGES.items():
-        print(f"    {cyan(pkg):<30} {dim(ver)}")
+        display_ver = ver if ver else "latest"
+        print(f"    {cyan(pkg):<30} {dim(display_ver)}")
     print()
     print("  Override any package version with --pkg:")
     print(f"    {dim('mlnew init myproject --pkg numpy==1.24.0 --pkg pandas==2.0.0')}")
@@ -246,7 +247,7 @@ def generate_readme(project_name: str, packages: dict) -> str:
     activate = r".venv\Scripts\Activate.ps1" if IS_WINDOWS else "source .venv/bin/activate"
     return f"""# {project_name}
 
-ML project scaffolded with [mlnew](https://github.com/yourusername/mlnew).
+ML project scaffolded with [mlnew](https://pypi.org/project/mlnew/).
 
 ## Setup
 
@@ -262,9 +263,11 @@ pip install -r requirements.txt
 python src/training/train.py
 ```
 
-## Installed Packages
+## Top-Level Packages
 
 {pkg_lines}
+
+> Note: These core packages include their own dependencies (approx. 150+ total), which are documented and pinned in `requirements.txt`.
 
 ## Project Structure
 
@@ -571,7 +574,12 @@ def main():
         return
 
     if args[0] == "--version":
-        print("  mlnew version 1.1.0")
+        try:
+            from importlib.metadata import version as pkg_version
+            ver = pkg_version("mlnew")
+        except Exception:
+            ver = "unknown"
+        print(f"  mlnew version {ver}")
         return
 
     if args[0] == "packages":
