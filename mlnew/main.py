@@ -187,17 +187,18 @@ def create_project(project_name: str, packages: dict):
 
     result = subprocess.run(
         [pip, "install"] + install_list,
-        capture_output=True,
-        text=True
+        check=False  # Allow getting return code manually
     )
     if result.returncode != 0:
-        warn("Some packages failed to install. Check versions and run pip install manually.")
-        warn(result.stderr.strip().splitlines()[-1] if result.stderr else "Unknown error")
+        warn("Some packages failed to install. Check the output above.")
+        # warn(result.stderr.strip().splitlines()[-1] if result.stderr else "Unknown error")
     else:
         step(f"Installed {len(install_list)} packages successfully")
 
     # 8. Freeze requirements
     freeze_result = subprocess.run([pip, "freeze"], capture_output=True, text=True)
+    if not freeze_result.stdout.strip():
+        warn("requirements.txt is empty! Dependencies might not have installed correctly.")
     (project_path / "requirements.txt").write_text(freeze_result.stdout, encoding="utf-8")
     step("Saved requirements.txt  →  exact versions pinned")
 
