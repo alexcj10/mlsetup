@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/logo.svg" width="400" alt="mlnew">
+<img src="https://raw.githubusercontent.com/alexcj10/mlsetup/main/assets/logo.svg" width="400" alt="mlnew">
 
 <br>
 
