@@ -1,0 +1,22 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@800&amp;display=swap');
+    .text {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-weight: 800;
+      font-size: 64px;
+      letter-spacing: -0.05em;
+    }
+    .ml { fill: #3b82f6; } /* Blue 500 */
+    .new { fill: #1e293b; } /* Slate 800 */
+    
+    @media (prefers-color-scheme: dark) {
+      .new { fill: #f8fafc; } /* Slate 50 */
+    }
+  </style>
+  <text x="10" y="60" class="text">
+    <tspan class="ml">ml</tspan><tspan class="new">new</tspan>
+  </text>
+  <!-- Subtle tech accent: a small dot at the end -->
+  <circle cx="215" cy="55" r="5" class="ml" />
+</svg>

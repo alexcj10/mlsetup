@@ -1,6 +1,7 @@
 <div align="center">
+<img src="assets/logo.svg" width="300" alt="mlnew">
 
-# mlnew
+<br>
 
 **Professional ML project scaffolding CLI — one command, zero config.**
 
