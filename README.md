@@ -58,6 +58,8 @@ All packages install the **latest compatible version** automatically.
 mlnew packages     # View all defaults anytime
 ```
 
+> Note: These 10 core packages include their own transitive dependencies (~150+ total), all of which are auto-detected and pinned in `requirements.txt`.
+
 ## Customize Packages
 
 Override any default or add new packages with `--pkg`:
