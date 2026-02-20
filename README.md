@@ -126,6 +126,26 @@ mlnew --help                            Show help
 - Python 3.8 or higher
 - Git (optional, for auto git init)
 
+## Troubleshooting
+
+### Command not found: `mlnew`
+
+If you see `mlnew: The term 'mlnew' is not recognized...` on Windows, it means your Python Scripts folder is not in your system PATH.
+
+**Option 1: Fix PATH (Recommended)**
+1. Search Windows for "Edit the system environment variables".
+2. Click "Environment Variables".
+3. Under "User variables", find `Path` and click "Edit".
+4. Add the path to your Python Scripts folder (e.g., `C:\Users\YourName\AppData\Roaming\Python\Python312\Scripts` or similar).
+5. restart your terminal.
+
+**Option 2: Use Python Module directly**
+You can always run the tool via python without fixing PATH:
+
+```bash
+python -m mlnew.main init my_project
+```
+
 ## License
 
 MIT
